@@ -1,45 +1,46 @@
-# AWS Event-Driven Security & Cost Optimization Automation:
+# AWS Event-Driven Security & Cost Optimization
 
-This project is an automated "watchdog" for an AWS Cloud environment. It uses Python and AWS Lambda to automatically fix security mistakes and save money by turning off unused servers.
+# What is this project?
 
-Instead of a human manually checking settings every day, this serverless bot monitors the account 24/7 and takes action instantly. Everything is built and deployed automatically using Terraform.
+Architected this automated security & cost optimization system to keep an AWS environment secure and cost-efficient. Instead of relying on engineers to manually check settings every day, these serverless Python scripts monitor the account 24/7 and take instant remediation actions when necessary.
 
-# How It Works :
+Everything is provisioned and deployed automatically using Terraform.
 
-The Security Guard (Instant Fixes):
+# How It Works
 
-The Problem: Sometimes developers accidentally create cloud storage folders (S3 Buckets) without turning on encryption, leaving data unprotected.
+1. The Security Guard :
 
-The Fix: AWS CloudTrail acts like a security camera and sees the bucket being created. It tells Amazon EventBridge to wake up our AWS Lambda.
+The Problem: Developers sometimes accidentally create S3 Buckets without enabling encryption, leaving company data unprotected.
 
-The Action: The bot instantly turns on AES-256 encryption for the bucket and sends an email alert to the security team via Amazon SNS.
+The Trigger: AWS CloudTrail monitors API calls and detects the unencrypted bucket creation. It forwards this event to Amazon EventBridge, which immediately triggers a Lambda function.
 
-2. The Money Saver (Hourly Checks):
+The Action: The Python script instantly enforces AES-256 encryption on the bucket and pushes an alert to the security team via Amazon SNS.
 
-The Problem: People often forget to turn off their virtual computers (EC2 instances) before going home, which costs the company money.
+2. The Money Saver :
 
-The Fix: Every hour, a timer wakes up the Python bot.
+The Problem: Virtual machines (EC2 instances) are often left running overnight or over the weekend, racking up unnecessary cloud bills.
 
-The Action: The bot checks the CPU usage of all running servers. If a server has been sitting idle (under 5% CPU) for the last hour, the bot automatically shuts it down and emails the finance (FinOps) team with the money-saving alert.
+The Trigger: An Amazon EventBridge cron schedule wakes up a Lambda function every hour.
 
-# Tech Stack Used:
+The Action: The script queries CloudWatch for CPU metrics across all running servers. If it finds a server sitting idle (under 5% CPU usage) for the last hour, it safely powers it down and emails the FinOps team with a cost-savings report.
 
-Infrastructure as code: Terraform
+# Tech Stack Used
+
+Infrastructure as Code: Terraform
 
 Code: Python 3 (Boto3 Library)
 
-AWS Services: Lambda (The Bot), EventBridge (The Triggers), CloudTrail (The Tracker), EC2 (Servers), S3 (Storage), SNS (Email Alerts).
+AWS Services: Lambda, EventBridge, CloudTrail, EC2, S3, SNS 
 
-# How to Deploy:
+# How to Deploy
 
-Clone this repository
+Clone this repository:
+git clone https://github.com/joshijay45/aws-security-cost-automation.git
 
-git clone [https://github.com/joshijay45/aws-security-cost-automation.git]
+Open the variables.tf file and update it with your email address to receive the alerts.
 
-Open the variables.tf file and add your email address to receive the alerts.
+Run terraform init to download the required providers.
 
-Run terraform init to download the plugins.
+Run terraform apply -auto-approve to launch the automation.
 
-Run terraform apply -auto-approve to launch the bot.
-
-Create an S3 bucket without encryption and watch your email for the instant fix alert!
+To test: Create a new S3 bucket in your account without encryption, and watch your email for the instant remediation alert.
