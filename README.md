@@ -1,4 +1,4 @@
-# AWS Event-Driven Security & Cost Optimization
+# DevSecOps & FinOps Infrastructure 
 
 # What is this project?
 
